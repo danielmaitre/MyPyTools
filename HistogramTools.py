@@ -33,6 +33,7 @@ newuiHost=re.compile(r'gridui..*.ac.uk')
 desktops=re.compile(r'[Dd][0-9]*.*')
 newdesktops=re.compile(r'[Dd]16*.*')
 scummy=re.compile(r'scummy')
+xps=re.compile(r'xps')
 
 
 if cernHost.match(hostname) or cernHost2.match(hostname) or cernHost3.match(hostname) or cernHost4.match(hostname):  
@@ -64,7 +65,7 @@ if desktops.match(hostname) and not newdesktops.match(hostname):
 #	sys.path.append('/u/home/bern/maitreda/root_svn/lib')
 	possiblePaths.append('/mt/home/daniel/workspace/NtuplesAnalysis/build_desktops/install_dir/lib/')
 
-if scummy.match(hostname) :
+if scummy.match(hostname) or xps.match(hostname) :
 #	sys.path.append('/u/home/bern/maitreda/root_svn/lib')
 	possiblePaths.append('/home/daniel/Tools/lib/')
 
