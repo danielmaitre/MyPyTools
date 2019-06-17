@@ -65,6 +65,7 @@ if desktops.match(hostname) and not newdesktops.match(hostname):
 #	sys.path.append('/u/home/bern/maitreda/root_svn/lib')
 	possiblePaths.append('/mt/home/daniel/workspace/NtuplesAnalysis/build_desktops/install_dir/lib/')
 
+
 if scummy.match(hostname) or xps.match(hostname):
 #	sys.path.append('/u/home/bern/maitreda/root_svn/lib')
 	possiblePaths.append('/home/daniel/Tools/lib/')
