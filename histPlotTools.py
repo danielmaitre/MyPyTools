@@ -2,6 +2,7 @@ import numpy as np
 import pylab
 import math
 import NNLOjetHistogramTool
+import raoulHistogramTool
 
 def double(arr):
     """
@@ -26,7 +27,7 @@ def makeHistWithErr(loc,x,y,e,**kwargs):
     loc.errorbar(x,y,yerr=e,**kwargsCopy)
 
 def makeFill(loc,x,y1,y2,**kwargs): 
-   loc.fill_between(double(x)[1:-1],double(y1),double(y2),**kwargs)
+  loc.fill_between(double(x)[1:-1],double(y1),double(y2),**kwargs)
 
 def readSherpaAnalysis(filename,part):
     f=open(filename)
@@ -56,6 +57,17 @@ def readNNLOjet(filename,histname,part):
     errors=hist[part+'_Err']
 
     return binEdges,values,errors
+
+def readRaoul(filename,histname):
+    x, v, e = raoulHistogramTool.getHist(filename, histname)
+    binEdges = np.array(x)
+    bw = binEdges[1:]-binEdges[:-1]
+    values = v[:-1]/bw
+    errors = e[:-1]/bw
+
+    return binEdges,values,errors
+
+
 
 
 class ratioPlot:
@@ -120,8 +132,13 @@ class ratioPlot:
 
         for v,ve,r,re,t,kwargs in zip(self.values,self.valuesE,self.ratios,self.ratiosE,self.types,self.kwargs):
             if t=='line':
-                ret=self.ax.errorbar(self.mid,v,yerr=ve,linestyle='none',**kwargs)
-                retr=self.axrat.errorbar(self.mid,r,yerr=re,linestyle='none',**kwargs)
+                styleDic = {}
+                styleDic.update({
+                    'linestyle':'none',
+                })
+                styleDic.update(kwargs)
+                ret=self.ax.errorbar(self.mid,v,yerr=ve,**styleDic)
+                retr=self.axrat.errorbar(self.mid,r,yerr=re,**styleDic)
                 if 'color' in kwargs.keys():
                     makeHist(self.ax,self.bb,v,**kwargs)
                     makeHist(self.axrat,self.bb,r,**kwargs)
@@ -170,6 +187,15 @@ class ratioPlot:
         else:
             self.addLine(x,v,e,**kwargs)  # don't include over and underflow
 
+    def addLineFromRaoul(self,filename,hist,restrict=None,**kwargs):
+        x, v, e = readRaoul(filename, hist)
+        if restrict:
+            i,f=restrict
+            self.addLine(x,v[i:f],e[i:f],**kwargs)  # don't include over and underflow
+        else:
+            self.addLine(x,v,e,**kwargs)  # don't include over and underflow
+
+            
 
     def saveIn(self,place):
         place.savefig(self.fig)
