@@ -31,10 +31,10 @@ def getHist(filename):
     _,neval=lines[1].split(':')
 
     neval=int(neval)
-    # lines[2] is overflow, not interested yet
-
-    allvalues=[list(map(float,l.split())) for l in lines[3:]]
-
+    # old NNLOjet: lines[2] is overflow, not interested yet
+    # new, values are in line 2
+    okLines = [l for l in lines if l[0]!='#']
+    allvalues = [list(map(float,l.split())) for l in okLines]
     for values in allvalues:
         if len(values)!=len(labels):
                print( "labels length ({0}) is not the same as values length ({1})".format(len(labels),len(values)) )

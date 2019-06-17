@@ -23,6 +23,8 @@ def whereAmI():
         return 'ITHAKA'
     if re.match('scummy',hostname):
         return 'SCUMMY'
+    if re.match('xps',hostname):
+        return 'XPS'
 
     
 
